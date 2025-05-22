@@ -104,6 +104,21 @@ Se você estiver executando a aplicação fora do Docker, será necessário subi
 docker run --name credito-db-test -e POSTGRES_DB=credito_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:17.5
 ```
 
+#### Kafka e Kafdrop localmente (modo manual, sem Docker Compose)
+
+```bash
+# 1. Crie a rede
+docker network create kafka-net
+
+# 2. Suba o Kafka
+docker run -d   --name kafka-local   --network kafka-net   -p 9092:9092   -p 29092:29092   -e KAFKA_NODE_ID=1   -e KAFKA_PROCESS_ROLES=broker,controller   -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka-local:9093   -e KAFKA_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_DOCKER://:29092,CONTROLLER://:9093   -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092,PLAINTEXT_DOCKER://kafka-local:29092   -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_DOCKER:PLAINTEXT,CONTROLLER:PLAINTEXT   -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER   -e KAFKA_AUTO_CREATE_TOPICS_ENABLE=true   -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1   apache/kafka:3.9.1
+
+# 3. Suba o Kafdrop (painel web para visualizar os tópicos Kafka)
+docker run -d   --name kafdrop   --network kafka-net   -p 9000:9000   -e KAFKA_BROKER_CONNECT=kafka-local:29092   obsidiandynamics/kafdrop:4.1.1-SNAPSHOT
+```
+
+Acesse o Kafdrop em: [http://localhost:9000](http://localhost:9000)
+
 ---
 
 ## 🏗️ Gerar Imagem Docker com Jib (sem Dockerfile)

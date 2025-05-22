@@ -2,6 +2,7 @@ package com.abimael.creditoapi.service;
 
 import com.abimael.creditoapi.dto.CreditoDto;
 import com.abimael.creditoapi.entity.Credito;
+import com.abimael.creditoapi.kafka.*;
 import com.abimael.creditoapi.mapper.*;
 import com.abimael.creditoapi.repository.CreditoRepository;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,11 @@ import java.util.List;
 @Service
 public class CreditoService {
     private final CreditoRepository creditoRepository;
+    private final CreditoKafkaPublisher publisher;
 
-    public CreditoService(CreditoRepository creditoRepository){
+    public CreditoService(CreditoRepository creditoRepository, CreditoKafkaPublisher publisher){
         this.creditoRepository = creditoRepository;
+        this.publisher = publisher;
     }
 
     /**
@@ -37,6 +40,8 @@ public class CreditoService {
      */
     public CreditoDto getCreditoByNumeroCredito(String numeroCredito) {
         Credito credito = creditoRepository.findByNumeroCredito(numeroCredito);
-        return CreditoMapper.toDto(credito);
+        var dto = CreditoMapper.toDto(credito);
+        publisher.publicarConsulta(dto);
+        return dto;
     }
 }
