@@ -24,4 +24,15 @@ public class CreditoService {
         List<Credito> creditoList = creditoRepository.findByNumeroNfse(numeroNfse);
         return creditoList.stream().map(CreditoDto::new).toList();
     }
+
+    /**
+     * Busca um {@link Credito} associado a um determinado número de crédito.
+     *
+     * @param numeroCredito número do crédito
+     * @return um {@link Credito} associado com o número de crédito
+     */
+    public CreditoDto getCreditoByNumeroCredito(String numeroCredito) {
+        Credito credito = creditoRepository.findByNumeroCredito(numeroCredito);
+        return new CreditoDto(credito);
+    }
 }

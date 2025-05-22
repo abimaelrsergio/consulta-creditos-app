@@ -21,4 +21,9 @@ public class CreditoController {
     public ResponseEntity<List<CreditoDto>> getCreditoByNfse(@PathVariable String numeroNfse) {
         return ResponseEntity.ok(creditoService.getCreditoByNfse(numeroNfse));
     }
+
+    @GetMapping("/credito/{numeroCredito}")
+    public ResponseEntity<CreditoDto> getCreditoByNumeroCredito(@PathVariable String numeroCredito) {
+        return ResponseEntity.ok(creditoService.getCreditoByNumeroCredito(numeroCredito));
+    }
 }

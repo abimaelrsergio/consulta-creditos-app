@@ -15,4 +15,12 @@ public interface CreditoRepository extends JpaRepository<Credito, Long> {
      * @return uma lista de {@link Credito} associados com uma NFS-e
      */
     List<Credito> findByNumeroNfse(String numeroNfse);
+
+    /**
+     * Busca um {@link Credito} associado a um determinado número de crédito.
+     *
+     * @param numeroCredito número do crédito
+     * @return um {@link Credito} associado com o número de crédito
+     */
+    Credito findByNumeroCredito(String numeroCredito);
 }
