@@ -10,6 +10,7 @@ Este projeto consiste em uma aplicação fullstack para consulta de créditos co
 - Containerização com Docker e geração de imagem via Jib.
 - Integração com mensageria via Kafka.
 - Testes automatizados com JUnit e Mockito.
+- Documentação interativa da API com Swagger OpenAPI.
 
 ---
 
@@ -23,6 +24,7 @@ Este projeto consiste em uma aplicação fullstack para consulta de créditos co
 - PostgreSQL
 - Jib Maven Plugin (build de imagem Docker)
 - JUnit 5 + Mockito
+- Springdoc OpenAPI (Swagger UI)
 
 ### Front-End
 - Angular 11+
@@ -71,6 +73,7 @@ docker-compose up --build
 
 A aplicação será acessível em:
 - Back-end: http://localhost:8080/api/creditos
+- Swagger UI: http://localhost:8080/swagger-ui/index.html
 - Front-end: http://localhost:4200
 - Kafka Broker (interno): kafka:9092
 
@@ -91,6 +94,14 @@ cd credito-api
 cd frontend
 npm install
 ng serve
+```
+
+#### Banco de Dados (PostgreSQL local)
+
+Se você estiver executando a aplicação fora do Docker, será necessário subir manualmente o banco de dados PostgreSQL com o seguinte comando:
+
+```bash
+docker run --name credito-db-test -e POSTGRES_DB=credito_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:17.5
 ```
 
 ---
