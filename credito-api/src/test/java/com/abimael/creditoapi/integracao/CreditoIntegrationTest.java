@@ -1,0 +1,94 @@
+package com.abimael.creditoapi.integracao;
+
+import com.abimael.creditoapi.dto.CreditoDto;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+@ActiveProfiles("test")
+public class CreditoIntegrationTest {
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17.5")
+            .withDatabaseName("credito_db")
+            .withUsername("postgres")
+            .withPassword("postgres");
+
+    @Container
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.0"));
+
+    /**
+     * Configura o contexto de teste do Spring Boot com propriedades dinâmicas
+     * fornecidas pelos containers do PostgreSQL e Kafka.
+     *
+     * Este método é anotado com {@link DynamicPropertySource} para instruir
+     * o Spring Boot a configurar o contexto da aplicação com as propriedades
+     * retornadas por este método.
+     *
+     * As propriedades configuradas aqui incluem a URL JDBC, o nome de usuário e
+     * a senha do banco de dados PostgreSQL, os servidores bootstrap do broker Kafka
+     * e o modo de inicialização do SQL.
+     *
+     * @param registry o registro de propriedades dinâmicas
+     */
+    @DynamicPropertySource
+    static void configureContainers(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+        registry.add("spring.sql.init.mode", () -> "always");
+    }
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    /**
+     * Deve retornar credito por numero de credito.
+     *
+     * Verifica se o endpoint de consulta por numero de credito retorna o credito
+     * correto. O teste verifica se o objeto credito retornado nao e nulo e se o
+     * numero de NFS-e e igual ao esperado.
+     */
+    @Test
+    void deveRetornarCreditoPorNumero() {
+        CreditoDto response = restTemplate.getForObject("/api/creditos/credito/123456", CreditoDto.class);
+        assertThat(response).isNotNull();
+        assertThat(response.getNumeroNfse()).isEqualTo("7891011");
+    }
+
+    @Test
+    void deveRetornarListaCreditoPorNfse() {
+        ResponseEntity<CreditoDto[]> response = restTemplate.getForEntity("/api/creditos/7891011", CreditoDto[].class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotEmpty();
+        assertThat(response.getBody()[0].getNumeroCredito()).isEqualTo("123456");
+    }
+
+    @Test
+    void deveRetornar404QuandoCreditoNaoExistente() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/creditos/credito/000", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).contains("Credito não encontrado");
+    }
+
+    @Test
+    void deveRetornar400QuandoParametroInvalido() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/creditos/ ", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+}
