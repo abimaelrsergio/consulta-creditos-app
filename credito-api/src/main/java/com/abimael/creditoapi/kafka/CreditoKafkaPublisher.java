@@ -1,6 +1,7 @@
 package com.abimael.creditoapi.kafka;
 
 import com.abimael.creditoapi.dto.CreditoDto;
+import lombok.extern.slf4j.*;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
  * Publica mensagens no tópico 'consultas_credito' sempre que uma consulta for realizada,
  * simulando uma estratégia de auditoria ou log distribuído.
  */
+@Slf4j
 @Component
 public class CreditoKafkaPublisher {
 
@@ -29,7 +31,11 @@ public class CreditoKafkaPublisher {
      */
     public void publicarConsultaNumeroCredito(String numeroCredito) {
         String mensagem = "Consulta realizada para crédito: " + numeroCredito;
-        kafkaTemplate.send("consultas_credito", mensagem);
+        try {
+            kafkaTemplate.send("consultas_credito", mensagem);
+        } catch (Exception e) {
+            log.error("Erro ao publicar no Kafka: {}", mensagem, e);
+        }
     }
 
     /**
@@ -39,7 +45,11 @@ public class CreditoKafkaPublisher {
      */
     public void publicarConsultaNumeroNfse(String numeroNfse) {
         String mensagem = "Consulta realizada para NFS-e: " + numeroNfse;
-        kafkaTemplate.send("consultas_credito", mensagem);
+        try {
+            kafkaTemplate.send("consultas_credito", mensagem);
+        } catch (Exception e) {
+            log.error("Erro ao publicar no Kafka: {}", mensagem, e);
+        }
     }
 }
 

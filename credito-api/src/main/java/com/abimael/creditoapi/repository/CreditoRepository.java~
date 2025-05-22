@@ -22,5 +22,5 @@ public interface CreditoRepository extends JpaRepository<Credito, Long> {
      * @param numeroCredito número do crédito
      * @return um {@link Credito} associado com o número de crédito
      */
-    Optional<Credito> findByNumeroCredito(String numeroCredito);
+    Credito findByNumeroCredito(String numeroCredito);
 }

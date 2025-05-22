@@ -1,0 +1,51 @@
+package com.abimael.creditoapi.exception;
+
+import com.abimael.creditoapi.dto.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.*;
+
+import java.time.*;
+
+/**
+ * Manipulador global de exceções responsável por tratar erros em toda a aplicação e retornar respostas de erro padronizadas.
+ * Autor: Abimael R Sergio
+ */
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    /**
+     * Trata a exceção ResourceNotFoundException e retorna uma resposta JSON contendo informações sobre o erro.
+     *
+     * @param exception a exceção a ser tratada
+     * @param webRequest a requisição web atual
+     * @return um ResponseEntity contendo a resposta de erro
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleResourceNotFoundException(ResourceNotFoundException exception,
+                                                                    WebRequest webRequest) {
+        ErrorDto errorDTO = new ErrorDto(
+                webRequest.getDescription(false),
+                HttpStatus.NOT_FOUND,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handle all IllegalArgumentExceptions and return a JSON response containing information about the error.
+     * @param exception the exception to be handled
+     * @param webRequest the current web request
+     * @return a ResponseEntity containing the error response
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorDto> handleIllegalArgumentException(IllegalArgumentException exception, WebRequest webRequest) {
+        ErrorDto errorDto = new ErrorDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+    }
+}

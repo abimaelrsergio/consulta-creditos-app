@@ -9,15 +9,6 @@ import com.abimael.creditoapi.repository.CreditoRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-/**
- * Serviço responsável pela lógica de negócios relacionada à consulta de créditos constituídos.
- * Realiza buscas por número de NFS-e ou número de crédito no repositório.
- * Aplica validações de entrada e trata cenários de ausência de dados.
- * Converte entidades em DTOs para retorno nas camadas superiores.
- * Também publica eventos de consulta no Kafka para fins de auditoria.
- * Atua como intermediário entre o controlador e o repositório de dados.
- * Projetado com princípios de separação de responsabilidades e resiliência.
- */
 @Service
 public class CreditoService {
 
