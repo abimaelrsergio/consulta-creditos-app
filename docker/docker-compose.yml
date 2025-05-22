@@ -16,6 +16,27 @@ services:
       - "5432:5432"
     networks:
       - consulta-creditos-network
+
+  credito-api:
+    image: abimaelrsergio/creditoapi:0.0.1
+    container_name: credito-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      credito-db:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: credito-api
+      SPRING_DATASOURCE_URL: jdbc:postgresql://credito-db:5432/credito_db?serverTimezone=America/Sao_Paulo
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - consulta-creditos-network
+
 networks:
   consulta-creditos-network:
     driver: "bridge"

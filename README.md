@@ -7,7 +7,7 @@ Este projeto consiste em uma aplicação fullstack para consulta de créditos co
 - Consulta de créditos constituídos por número da NFS-e.
 - Consulta de detalhes de um crédito específico por número do crédito.
 - Interface web para consulta e visualização dos dados.
-- Containerização com Docker para fácil execução.
+- Containerização com Docker e geração de imagem via Jib.
 - Integração com mensageria via Kafka.
 - Testes automatizados com JUnit e Mockito.
 
@@ -20,7 +20,8 @@ Este projeto consiste em uma aplicação fullstack para consulta de créditos co
 - Spring Boot
 - Spring Data JPA
 - Hibernate
-- PostgreSQL ou MariaDB
+- PostgreSQL
+- Jib Maven Plugin (build de imagem Docker)
 - JUnit 5 + Mockito
 
 ### Front-End
@@ -36,14 +37,14 @@ Este projeto consiste em uma aplicação fullstack para consulta de créditos co
 
 ## 📁 Estrutura do Projeto
 
-\`\`\`
+```
 consulta-creditos-api/
-├── credito-api/           # Projeto Spring Boot
-├── frontend/          # Projeto Angular
-├── docker/            # Dockerfiles e docker-compose.yml
+├── credito-api/        # Projeto Spring Boot
+├── frontend/           # Projeto Angular
+├── docker/             # Dockerfiles e docker-compose.yml
 ├── .gitignore
 └── README.md
-\`\`\`
+```
 
 ---
 
@@ -57,16 +58,16 @@ consulta-creditos-api/
 
 ### 1. Clonar o repositório
 
-\`\`\`bash
+```bash
 git clone https://github.com/seu-usuario/consulta-creditos-api.git
 cd consulta-creditos-api
-\`\`\`
+```
 
 ### 2. Subir com Docker (recomendado)
 
-\`\`\`bash
+```bash
 docker-compose up --build
-\`\`\`
+```
 
 A aplicação será acessível em:
 - Back-end: http://localhost:8080/api/creditos
@@ -75,17 +76,37 @@ A aplicação será acessível em:
 ### 3. Executar manualmente
 
 #### Back-End
-\`\`\`bash
+
+```bash
 cd credito-api
 ./mvnw spring-boot:run
-\`\`\`
+```
 
 #### Front-End
-\`\`\`bash
+
+```bash
 cd frontend
 npm install
 ng serve
-\`\`\`
+```
+
+---
+
+## 🏗️ Gerar Imagem Docker com Jib (sem Dockerfile)
+
+A imagem Docker do projeto Spring Boot pode ser gerada diretamente com o plugin Jib:
+
+```bash
+cd credito-api
+./mvnw compile jib:dockerBuild
+```
+
+A imagem será criada localmente com o nome:
+```
+abimaelrsergio/creditoapi:1.0.0
+```
+
+Você pode personalizar a tag conforme a versão declarada no `pom.xml`.
 
 ---
 
@@ -93,20 +114,20 @@ ng serve
 
 ### Back-End
 
-\`\`\`bash
+```bash
 cd credito-api
 ./mvnw test
-\`\`\`
+```
 
 ---
 
 ## 📦 API – Endpoints
 
-### \`GET /api/creditos/{numeroNfse}\`
+### `GET /api/creditos/{numeroNfse}`
 
 Retorna os créditos associados à NFS-e informada.
 
-### \`GET /api/creditos/credito/{numeroCredito}\`
+### `GET /api/creditos/credito/{numeroCredito}`
 
 Retorna os detalhes de um crédito específico.
 
