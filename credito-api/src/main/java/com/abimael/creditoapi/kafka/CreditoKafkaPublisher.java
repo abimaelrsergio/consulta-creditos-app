@@ -15,6 +15,9 @@ public class CreditoKafkaPublisher {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
+    /**
+     * @param kafkaTemplate injetado como Singleton pelo Spring, conforme configuração em KafkaProducerConfig
+     */
     public CreditoKafkaPublisher(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
