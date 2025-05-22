@@ -25,7 +25,7 @@ public class CreditoService {
      * @return lista de créditos associados
      */
     public List<CreditoDto> getCreditoByNfse(String numeroNfse) {
-        List<Credito> creditoList = creditoRepository.findByNumeroNfse(numeroNfse);
+        publisher.publicarConsultaNumeroNfse(numeroNfse);
         return creditoRepository.findByNumeroNfse(numeroNfse)
                 .stream()
                 .map(CreditoMapper::toDto)
@@ -39,9 +39,8 @@ public class CreditoService {
      * @return um {@link Credito} associado com o número de crédito
      */
     public CreditoDto getCreditoByNumeroCredito(String numeroCredito) {
+        publisher.publicarConsultaNumeroCredito(numeroCredito);
         Credito credito = creditoRepository.findByNumeroCredito(numeroCredito);
-        var dto = CreditoMapper.toDto(credito);
-        publisher.publicarConsulta(dto);
-        return dto;
+        return CreditoMapper.toDto(credito);
     }
 }

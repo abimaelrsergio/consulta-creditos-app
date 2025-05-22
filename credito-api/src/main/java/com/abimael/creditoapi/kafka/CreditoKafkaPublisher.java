@@ -20,13 +20,22 @@ public class CreditoKafkaPublisher {
     }
 
     /**
-     * Publica a consulta de crédito em formato simplificado.
+     * Publica a consulta de crédito por número de crédito em formato simplificado.
      *
-     * @param dto DTO com os dados do crédito consultado
+     * @param numeroCredito número do crédito consultado
      */
-    public void publicarConsulta(CreditoDto dto) {
-        String mensagem = "Consulta realizada para crédito: " + dto.getNumeroCredito()
-                + ", NFS-e: " + dto.getNumeroNfse();
+    public void publicarConsultaNumeroCredito(String numeroCredito) {
+        String mensagem = "Consulta realizada para crédito: " + numeroCredito;
+        kafkaTemplate.send("consultas_credito", mensagem);
+    }
+
+    /**
+     * Publica a consulta de crédito por NFS-e em formato simplificado.
+     *
+     * @param numeroNfse número da NFS-e consultada
+     */
+    public void publicarConsultaNumeroNfse(String numeroNfse) {
+        String mensagem = "Consulta realizada para NFS-e: " + numeroNfse;
         kafkaTemplate.send("consultas_credito", mensagem);
     }
 }
