@@ -155,6 +155,14 @@ O Apache Kafka está configurado na versão `3.9.1`, rodando em modo KRaft (sem 
 
 ---
 
+## 📝 Padrão de Commits
+
+Este projeto segue o padrão [Conventional Commits](https://www.conventionalcommits.org/) para mensagens de commit.
+
+Esse padrão facilita a organização do histórico, permite automações como geração de changelog e melhora a legibilidade das mudanças no projeto.
+
+---
+
 ## 📃 Licença
 
 ```
