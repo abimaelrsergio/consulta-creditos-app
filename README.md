@@ -72,6 +72,9 @@ docker-compose up --build
 A aplicação será acessível em:
 - Back-end: http://localhost:8080/api/creditos
 - Front-end: http://localhost:4200
+- Kafka Broker (interno): kafka:9092
+
+> O Kafka é configurado com a imagem `apache/kafka:3.9.1` em modo KRaft (sem ZooKeeper), e os tópicos são criados automaticamente. A aplicação `credito-api` está preparada para publicar mensagens via Kafka.
 
 ### 3. Executar manualmente
 
@@ -136,6 +139,8 @@ Retorna os detalhes de um crédito específico.
 ## 📬 Mensageria 
 
 Sempre que uma consulta é realizada, uma mensagem é publicada em um tópico Kafka contendo os dados da operação, simulando um cenário de auditoria.
+
+O Apache Kafka está configurado na versão `3.9.1`, rodando em modo KRaft (sem ZooKeeper). A aplicação se conecta ao broker usando a URL `kafka:9092` via variável de ambiente `SPRING_KAFKA_BOOTSTRAP_SERVERS`.
 
 ---
 
