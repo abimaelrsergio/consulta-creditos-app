@@ -25,7 +25,7 @@ public class CreditoService {
         List<Credito> creditoList = creditoRepository.findByNumeroNfse(numeroNfse);
         return creditoRepository.findByNumeroNfse(numeroNfse)
                 .stream()
-                .map(CreditoMapper::toDto)
+                .map(CreditoMapper::fromEntity)
                 .toList();
     }
 
@@ -37,6 +37,6 @@ public class CreditoService {
      */
     public CreditoDto getCreditoByNumeroCredito(String numeroCredito) {
         Credito credito = creditoRepository.findByNumeroCredito(numeroCredito);
-        return CreditoMapper.toDto(credito);
+        return CreditoMapper.fromEntity(credito);
     }
 }
