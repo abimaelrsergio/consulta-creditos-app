@@ -76,7 +76,8 @@ A aplicação será acessível em:
 - Front-end: http://localhost:4200
 - Kafdrop: http://localhost:9000
 - Swagger UI: http://localhost:8080/swagger-ui/index.html
-- Back-end: http://localhost:8080/api/creditos/7891011
+- Back-end (numeroNfse): http://localhost:8080/api/creditos/7891011
+- Back-end (numeroCredito): http://localhost:8080/api/creditos/credito/789012
 - Kafka Broker (interno): kafka:9092
 
 > O Kafka é configurado com a imagem `apache/kafka:3.9.1` em modo KRaft (sem ZooKeeper), e os tópicos são criados automaticamente. A aplicação `credito-api` está preparada para publicar mensagens via Kafka.
