@@ -79,6 +79,26 @@ A aplicação será acessível em:
 
 > O Kafka é configurado com a imagem `apache/kafka:3.9.1` em modo KRaft (sem ZooKeeper), e os tópicos são criados automaticamente. A aplicação `credito-api` está preparada para publicar mensagens via Kafka.
 
+### ⚙️ Observação importante sobre o Front-End Angular (produção com Docker)
+
+Antes de subir o projeto com `docker-compose up`, é necessário compilar o front-end em modo de produção. Para isso, execute o seguinte comando dentro da pasta `frontend`:
+
+```bash
+cd frontend
+npm install
+npm run build --prod
+```
+
+Esse comando irá gerar os arquivos de produção dentro da pasta `dist/frontend/browser`. Esses arquivos serão usados pelo contêiner NGINX no Docker para servir a aplicação Angular.
+
+Depois disso, volte ao diretório raiz do projeto e suba normalmente com:
+
+```bash
+docker-compose up --build -d
+```
+
+A interface web estará disponível em: [http://localhost:4200/consulta](http://localhost:4200/consulta)
+
 ### 3. Executar manualmente
 
 #### Back-End
