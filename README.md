@@ -61,7 +61,7 @@ consulta-creditos-api/
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/consulta-creditos-api.git
+git clone https://github.com/abimaelrsergio/consulta-creditos-app.git
 cd consulta-creditos-api
 ```
 
