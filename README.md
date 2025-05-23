@@ -68,6 +68,7 @@ cd consulta-creditos-app
 ### 2. Subir com Docker (recomendado)
 
 ```bash
+cd docker
 docker-compose up --build
 ```
 
