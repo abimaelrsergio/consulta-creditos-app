@@ -1,0 +1,69 @@
+package com.abimael.creditoapi.service;
+
+import com.abimael.creditoapi.dto.CreditoDto;
+import com.abimael.creditoapi.entity.Credito;
+import com.abimael.creditoapi.exception.*;
+import com.abimael.creditoapi.kafka.*;
+import com.abimael.creditoapi.mapper.*;
+import com.abimael.creditoapi.repository.CreditoRepository;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+/**
+ * Serviço responsável pela lógica de negócios relacionada à consulta de créditos constituídos.
+ * Realiza buscas por número de NFS-e ou número de crédito no repositório.
+ * Aplica validações de entrada e trata cenários de ausência de dados.
+ * Converte entidades em DTOs para retorno nas camadas superiores.
+ * Também publica eventos de consulta no Kafka para fins de auditoria.
+ * Atua como intermediário entre o controlador e o repositório de dados.
+ * Projetado com princípios de separação de responsabilidades e resiliência.
+ */
+@Service
+public class CreditoService {
+
+    private static final String ENTIDADE = "Credito";
+
+    private final CreditoRepository creditoRepository;
+    private final CreditoKafkaPublisher publisher;
+
+    public CreditoService(CreditoRepository creditoRepository, CreditoKafkaPublisher publisher){
+        this.creditoRepository = creditoRepository;
+        this.publisher = publisher;
+    }
+
+    /**
+     * Busca os credito(s) associados a um determinado numero de NFS-e.
+     *
+     * @param numeroNfse número da NFS-e
+     * @return lista de créditos associados
+     */
+    public List<CreditoDto> getCreditoByNfse(String numeroNfse) {
+        if (numeroNfse == null || numeroNfse.isBlank()) {
+            throw new IllegalArgumentException("Número da NFS-e não pode ser nulo ou vazio");
+        }
+        publisher.publicarConsultaNumeroNfse(numeroNfse);
+        var creditos = creditoRepository.findByNumeroNfse(numeroNfse);
+        if (creditos == null || creditos.isEmpty()) throw new ResourceNotFoundException(ENTIDADE, "número de NFs-e", numeroNfse);
+        return creditos
+                .stream()
+                .map(CreditoMapper::toDto)
+                .toList();
+    }
+
+    /**
+     * Busca um {@link Credito} associado a um determinado número de crédito.
+     *
+     * @param numeroCredito número do crédito
+     * @return um {@link CreditoDto} associado com o número de crédito
+     */
+    public CreditoDto getCreditoByNumeroCredito(String numeroCredito) {
+        if (numeroCredito == null || numeroCredito.isBlank()) {
+            throw new IllegalArgumentException("Número do crédito não pode ser nulo ou vazio");
+        }
+        publisher.publicarConsultaNumeroCredito(numeroCredito);
+        Credito credito = creditoRepository.findByNumeroCredito(numeroCredito).orElseThrow(
+                () -> new ResourceNotFoundException(ENTIDADE, "número de crédito", numeroCredito)
+        );
+        return CreditoMapper.toDto(credito);
+    }
+}

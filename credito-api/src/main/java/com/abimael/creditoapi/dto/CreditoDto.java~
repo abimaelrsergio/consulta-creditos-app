@@ -1,0 +1,81 @@
+package com.abimael.creditoapi.dto;
+import io.swagger.v3.oas.annotations.media.*;
+import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+/**
+ * Representa um crédito constituído. Contém atributos como número do crédito, NFS-e,
+ * valores e indicadores fiscais.
+ */
+@Schema(
+        name = "Credito",
+        description = "Objeto Credito"
+)
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class CreditoDto {
+
+    /** Número identificador do crédito constituído */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private String numeroCredito;
+
+    /** Número da nota fiscal de serviço eletrônica (NFS-e) vinculada ao crédito */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private String numeroNfse;
+
+    /** Data em que o crédito foi constituído */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private LocalDate dataConstituicao;
+
+    /** Valor do ISSQN apurado para o crédito */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private BigDecimal valorIssqn;
+
+    /** Tipo do crédito, como ISSQN ou Outros */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private String tipoCredito;
+
+    /** Indica se o contribuinte é optante pelo Simples Nacional (Sim ou Não) */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private String simplesNacional;
+
+    /** Alíquota utilizada na apuração do crédito */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private BigDecimal aliquota;
+
+    /** Valor total faturado na operação */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private BigDecimal valorFaturado;
+
+    /** Valor total de deduções aplicadas */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private BigDecimal valorDeducao;
+
+    /** Base de cálculo final utilizada para cálculo do ISSQN */
+    @Schema(
+            description = "Número identificador do crédito constituído"
+    )
+    private BigDecimal baseCalculo;
+}
+

@@ -1,0 +1,63 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <h2 class="text-center mb-4">Consulta de Créditos</h2>
+
+      <!-- Campo: NFS-e -->
+      <div class="input-group mb-3">
+        <input class="form-control" [(ngModel)]="numeroNfse" placeholder="Digite o número da NFS-e" />
+        <button class="btn btn-outline-primary" (click)="consultarPorNfse()">Buscar por NFS-e</button>
+      </div>
+
+      <!-- Campo: Número de Crédito -->
+      <div class="input-group mb-3">
+        <input class="form-control" [(ngModel)]="numeroCredito" placeholder="Digite o número do crédito" />
+        <button class="btn btn-outline-success" (click)="consultarPorNumeroCredito()">Buscar por Crédito</button>
+      </div>
+
+      <!-- Mensagem de erro -->
+      <div *ngIf="erro" class="alert alert-danger text-center">
+        {{ erro }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabela com resultados -->
+  <div *ngIf="creditos.length" class="row justify-content-center mt-4">
+    <div class="col">
+      <h4 class="text-center mb-3">Créditos encontrados</h4>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Número Crédito</th>
+              <th>Número NFS-e</th>
+              <th>Data Constituição</th>
+              <th>Valor ISSQN</th>
+              <th>Tipo Crédito</th>
+              <th>Simples Nacional</th>
+              <th>Alíquota</th>
+              <th>Valor Faturado</th>
+              <th>Valor Dedução</th>
+              <th>Base Cálculo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of creditos">
+              <td>{{ c.numeroCredito }}</td>
+              <td>{{ c.numeroNfse }}</td>
+              <td>{{ c.dataConstituicao }}</td>
+              <td>{{ c.valorIssqn | currency:'BRL' }}</td>
+              <td>{{ c.tipoCredito }}</td>
+              <td>{{ c.simplesNacional }}</td>
+              <td>{{ c.aliquota }}</td>
+              <td>{{ c.valorFaturado }}</td>
+              <td>{{ c.valorDeducao }}</td>
+              <td>{{ c.baseCalculo }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
