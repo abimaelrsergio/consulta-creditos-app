@@ -28,16 +28,14 @@ export class ConsultaCreditoComponent {
       next: (res) => this.creditos = res,
       error: (err) => this.erro = 'NFS-e não encontrada ou inválida.'
     });
-    console.log(this.erro);
   }
 
   consultarPorNumeroCredito() {
     this.erro = null;
-    this.creditoDetalhado = null;
     this.creditos = [];
 
     this.creditoService.getByNumeroCredito(this.numeroCredito).subscribe({
-      next: (res) => this.creditoDetalhado = res,
+      next: (res) => this.creditos = [res],
       error: (err) => this.erro = 'Crédito não encontrado ou inválido.'
     });
   }
