@@ -62,7 +62,7 @@ consulta-creditos-api/
 
 ```bash
 git clone https://github.com/abimaelrsergio/consulta-creditos-app.git
-cd consulta-creditos-api
+cd consulta-creditos-app
 ```
 
 ### 2. Subir com Docker (recomendado)
