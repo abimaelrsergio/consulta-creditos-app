@@ -1,0 +1,31 @@
+<h2>Consulta de Créditos</h2>
+
+<div>
+  <label>Número da NFS-e:</label>
+  <input [(ngModel)]="numeroNfse" placeholder="Digite o número da NFS-e" />
+  <button (click)="consultarPorNfse()">Buscar por NFS-e</button>
+</div>
+
+<div>
+  <label>Número do Crédito:</label>
+  <input [(ngModel)]="numeroCredito" placeholder="Digite o número do crédito" />
+  <button (click)="consultarPorNumeroCredito()">Buscar por Crédito</button>
+</div>
+
+<div *ngIf="erro" style="color: red;">
+  {{ erro }}
+</div>
+
+<div *ngIf="creditoDetalhado">
+  <h3>Crédito encontrado</h3>
+  <pre>{{ creditoDetalhado | json }}</pre>
+</div>
+
+<div *ngIf="creditos.length">
+  <h3>Créditos encontrados</h3>
+  <ul>
+    <li *ngFor="let c of creditos">
+      Número Crédito: {{ c.numeroCredito }} - Valor ISSQN: {{ c.valorIssqn | currency:'BRL' }}
+    </li>
+  </ul>
+</div>
