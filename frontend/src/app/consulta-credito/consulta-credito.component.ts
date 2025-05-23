@@ -28,6 +28,7 @@ export class ConsultaCreditoComponent {
       next: (res) => this.creditos = res,
       error: (err) => this.erro = 'NFS-e não encontrada ou inválida.'
     });
+    console.log(this.erro);
   }
 
   consultarPorNumeroCredito() {
