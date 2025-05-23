@@ -69,7 +69,7 @@ cd consulta-creditos-app
 
 ```bash
 cd docker
-docker-compose up --build
+docker-compose up --build -d
 ```
 
 A aplicação será acessível em:
